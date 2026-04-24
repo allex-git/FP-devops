@@ -24,7 +24,7 @@ jobs:
 
       - name: generate commit sha
         id: vars
-        run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+        run: echo "TAG=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
 
       - name: build and push docker image
         uses: docker/build-push-action@v5
