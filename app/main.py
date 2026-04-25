@@ -28,8 +28,8 @@ def root():
         "ip": ip,
         "author": "Allex_DevOps",
         "datetime": now.isoformat(),
-        "started_at": START_TIME.isoformat()
-        #"uptime_seconds": uptime_seconds
+        "started_at": START_TIME.isoformat(),
+        "uptime_seconds": uptime_seconds
     }
 
 
