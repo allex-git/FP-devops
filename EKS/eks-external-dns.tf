@@ -8,10 +8,10 @@ module "eks-external-dns" {
   cluster_identity_oidc_issuer_arn = module.oidc-provider-data.arn
   irsa_role_name_prefix            = var.name
 
-  settings = {
-    domainFilters = [var.zone_name]
-    policy        = "upsert-only"
-    txtOwnerId    = var.name
-  }
+  # settings = {
+  #   domainFilters = [var.zone_name]
+  #   policy        = "upsert-only"
+  #   txtOwnerId    = var.name
+  # }
 }
 
