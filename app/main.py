@@ -26,10 +26,7 @@ def root():
         "status": "ok",
         "hostname": hostname,
         "ip": ip,
-        #"datetime": now.isoformat(),
-        #"started_at": START_TIME.isoformat(),
         "author": "Allex_DevOps"
-        #"uptime_seconds": uptime_seconds
     }
 
 
