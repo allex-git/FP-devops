@@ -7,8 +7,9 @@ module "eks-external-dns" {
   cluster_identity_oidc_issuer     = aws_eks_cluster.danit.identity.0.oidc.0.issuer
   cluster_identity_oidc_issuer_arn = module.oidc-provider-data.arn
   irsa_role_name_prefix            = var.name
+
   settings = {
-    domainFilters = var.zone_name
+    domainFilters = [var.zone_name]
     policy        = "upsert-only"
     txtOwnerId    = var.name
   }
