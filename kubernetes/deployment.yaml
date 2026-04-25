@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: python-app
-          image: alexdevops05/final-project:07ddc51
+          image: alexdevops05/final-project:20f047b
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
