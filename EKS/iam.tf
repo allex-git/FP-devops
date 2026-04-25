@@ -17,9 +17,9 @@ resource "aws_iam_role" "cluster" {
 }
 POLICY
   tags = merge(
-    var.tags,
-    { Name = "${var.name}-eks-role" }
-  )
+  local.common_tags,
+  { Name = "${var.name}-eks-role" }
+)
 }
 
 resource "aws_iam_role_policy_attachment" "kubeedge-cluster-AmazonEKSClusterPolicy" {
@@ -67,8 +67,8 @@ resource "aws_iam_role" "danit-node" {
 }
 POLICY
   tags = merge(
-    var.tags,
-    { Name = "${var.name}-eks-node-role" }
+  local.common_tags,
+  { Name = "${var.name}-eks-node-role" }
   )
 }
 

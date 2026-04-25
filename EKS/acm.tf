@@ -21,7 +21,7 @@ module "acm" {
   wait_for_validation = true
 
   tags = merge(
-    var.tags,
+    local.common_tags,
     { Name = "${var.name}-eks" }
   )
 }

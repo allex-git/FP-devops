@@ -4,7 +4,7 @@ terraform {
     key            = "state/allex-devops/final-project/terraform.tfstate"
     region         = "eu-central-1"
     encrypt        = true
-    dynamodb_table = "lock-tf-eks"
+    dynamodb_table = "allex-devops-lock-tf"
   }
 }
 

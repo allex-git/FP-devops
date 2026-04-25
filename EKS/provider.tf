@@ -2,6 +2,11 @@
 provider "aws" {
   region  = var.region
   profile = var.iam_profile
+  default_tags {
+    tags = {
+      created_by = "Allex-DevOps"
+    }
+  }
 }
 
 

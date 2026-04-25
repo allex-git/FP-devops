@@ -22,5 +22,5 @@ module "vpc" {
   enable_nat_gateway = true
   single_nat_gateway = true
 
-  tags = var.tags
+  tags = local.common_tags
 }

@@ -11,8 +11,8 @@ resource "helm_release" "argocd" {
   <<EOF
 configs:
   cm:
-    timeout.reconciliation: 10s
-    timeout.hard.reconciliation: 0s
+    timeout.reconciliation: 15s
+
 server:
   extraArgs:
     - --insecure
@@ -27,5 +27,14 @@ server:
       external-dns.alpha.kubernetes.io/hostname: argocd.allex-devops.devops11.test-danit.com
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 EOF
-]
+  ]
+}
+
+resource "kubernetes_manifest" "argocd_app" {
+  manifest = yamldecode(file("${path.module}/../argocd/application.yaml"))
+
+  depends_on = [
+    helm_release.argocd,
+    aws_eks_node_group.danit
+  ]
 }

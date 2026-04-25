@@ -11,8 +11,8 @@ resource "aws_security_group" "danit-cluster" {
   }
 
   tags = merge(
-    var.tags,
-    { Name = "${var.name}-eks-sg" }
+  local.common_tags,
+  { Name = "${var.name}-eks-sg" }
   )
 }
 

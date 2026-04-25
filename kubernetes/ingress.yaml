@@ -4,6 +4,7 @@ metadata:
   name: python-app-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
+    external-dns.alpha.kubernetes.io/hostname: app.allex-devops.devops11.test-danit.com
 spec:
   rules:
     - host: app.allex-devops.devops11.test-danit.com

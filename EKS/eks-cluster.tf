@@ -12,9 +12,9 @@ resource "aws_eks_cluster" "danit" {
     aws_iam_role_policy_attachment.kubeedge-cluster-AmazonEKSVPCResourceController,
   ]
   tags = merge(
-    var.tags,
-    { Name = "${var.name}" }
-  )
+      local.common_tags,
+      { Name = "${var.name}" }
+    )
 }
 
 data "aws_eks_cluster_auth" "danit" {

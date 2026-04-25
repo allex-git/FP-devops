@@ -12,7 +12,7 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 COPY app/ .
 
-LABEL maintainer="AllexDevOps"
+LABEL maintainer="Allex DevOps"
 LABEL project="Final-Project"
 LABEL description="Final Project"
 
