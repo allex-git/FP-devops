@@ -30,11 +30,11 @@ EOF
   ]
 }
 
-resource "kubernetes_manifest" "argocd_app" {
-  manifest = yamldecode(file("${path.module}/../argocd/application.yaml"))
+# resource "kubernetes_manifest" "argocd_app" {
+#   manifest = yamldecode(file("${path.module}/../argocd/application.yaml"))
 
-  depends_on = [
-    helm_release.argocd,
-    aws_eks_node_group.danit
-  ]
-}
+#   depends_on = [
+#     helm_release.argocd,
+#     aws_eks_node_group.danit
+#   ]
+# }
