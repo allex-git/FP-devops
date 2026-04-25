@@ -9,6 +9,10 @@ resource "helm_release" "argocd" {
 
   values = [
   <<EOF
+configs:
+  cm:
+    timeout.reconciliation: 10s
+    timeout.hard.reconciliation: 0s
 server:
   extraArgs:
     - --insecure

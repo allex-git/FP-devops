@@ -26,8 +26,8 @@ def root():
         "status": "ok",
         "hostname": hostname,
         "ip": ip,
-        "author": "Allex_DevOps",
-        "uptime_seconds": uptime_seconds
+        "author": "Allex_DevOps"#,
+        #"uptime_seconds": uptime_seconds
     }
 
 
