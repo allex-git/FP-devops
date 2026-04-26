@@ -85,11 +85,12 @@ resource "aws_iam_policy" "secrets_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        "Sid" : "AllowListHostedZones",
+        "Sid" : "AllowRoute53Changes",
         "Effect" : "Allow",
         "Action" : [
           "route53:ListHostedZones",
           "route53:ListResourceRecordSets",
+          "route53:ChangeResourceRecordSets"
         ],
         "Resource" : "*"
       }
