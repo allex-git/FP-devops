@@ -1,5 +1,14 @@
 variable "name" {
 }
+variable "vpc_cidr" {
+
+}
+variable "private_subnets" {
+
+}
+variable "public_subnets" {
+
+}
 variable "tags" {
 }
 variable "region" {
@@ -14,4 +23,7 @@ variable "iam_profile" {
 }
 
 variable "zone_name" {
+}
+variable "created_by" {
+  default = "Allex_Devops"
 }

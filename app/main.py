@@ -1,38 +1,46 @@
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
 import socket
+import os
 from datetime import datetime, timezone
 
 app = FastAPI()
 
+app.mount("/web", StaticFiles(directory="app/webpage"), name="web")
+
 START_TIME = datetime.now(timezone.utc)
+
+POD_IP = os.getenv("POD_IP", "unknown")
+POD_NAME = os.getenv("POD_NAME", "unknown")
 
 
 def get_host_info():
     hostname = socket.gethostname()
     try:
         ip = socket.gethostbyname(hostname)
-    except Exception:
+    except:
         ip = "unknown"
     return hostname, ip
 
-@app.get("/")
-def root():
-    hostname, ip = get_host_info()
+@app.get("/", response_class=HTMLResponse)
+def ui():
+    with open("app/webpage/index.html", encoding="utf-8") as f:
+        return f.read()
 
+@app.get("/api")
+def api():
+    hostname, ip = get_host_info()
     now = datetime.now(timezone.utc)
-    uptime_seconds = int((now - START_TIME).total_seconds())
 
     return {
         "status": "ok",
         "hostname": hostname,
         "ip": ip,
-        "author": "Allex_DevOps"#,
-        #"uptime_seconds": uptime_seconds
-    }
-
-
-@app.get("/healthz")
-def health():
-    return {
-        "status": "healthy"
+        "pod_ip": POD_IP,
+        "pod_name": POD_NAME,
+        "author": "Allex DevOps",
+        "datetime": now.isoformat(),
+        "uptime_seconds": int((now - START_TIME).total_seconds())
     }

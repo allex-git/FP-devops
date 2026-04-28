@@ -1,14 +1,17 @@
 resource "helm_release" "argocd" {
-  name       = "argocd"
-  namespace  = "argocd"
-  repository = "https://argoproj.github.io/argo-helm"
-  chart      = "argo-cd"
-  version    = "5.51.6"
-
+  name             = "argocd"
+  namespace        = "argocd"
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argo-cd"
+  version          = "9.5.4"
   create_namespace = true
 
+  depends_on = [
+    helm_release.nginx_ingress
+  ]
+
   values = [
-  <<EOF
+    <<EOF
 configs:
   cm:
     timeout.reconciliation: 15s
@@ -29,12 +32,3 @@ server:
 EOF
   ]
 }
-
-# resource "kubernetes_manifest" "argocd_app" {
-#   manifest = yamldecode(file("${path.module}/../argocd/application.yaml"))
-
-#   depends_on = [
-#     helm_release.argocd,
-#     aws_eks_node_group.danit
-#   ]
-# }
