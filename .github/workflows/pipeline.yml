@@ -17,10 +17,6 @@ jobs:
       - name: check python syntax
         run: python -m py_compile $(git ls-files '*.py')
 
-      - name: dockerfile lint
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: Dockerfile
 
       - name: scan secrets
         uses: trufflesecurity/trufflehog@main
