@@ -41,6 +41,6 @@ def api():
         "pod_ip": POD_IP,
         "pod_name": POD_NAME,
         "author": "Allex DevOps",
-        "datetime": now.isoformat(),
+        #"datetime": now.isoformat(),
         "uptime_seconds": int((now - START_TIME).total_seconds())
     }

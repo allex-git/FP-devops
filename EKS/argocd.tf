@@ -10,8 +10,8 @@ resource "helm_release" "argocd" {
     helm_release.nginx_ingress
   ]
 
-  values = [
-    <<EOF
+values = [
+<<EOF
 configs:
   cm:
     timeout.reconciliation: 15s
@@ -24,11 +24,34 @@ server:
     enabled: true
     ingressClassName: nginx
     hosts:
-      - argocd.allex-devops.devops11.test-danit.com
+      - host: argocd.allex-devops.devops11.test-danit.com
+        paths:
+          - /
     annotations:
       kubernetes.io/ingress.class: nginx
       external-dns.alpha.kubernetes.io/hostname: argocd.allex-devops.devops11.test-danit.com
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+
+application:
+  enabled: true
+
+applications:
+  python-app:
+    namespace: argocd
+    project: default
+
+    source:
+      repoURL: https://github.com/allex-git/FP-devops.git
+      targetRevision: main
+      path: kubernetes
+
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: default
+
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
 EOF
-  ]
+]
 }
