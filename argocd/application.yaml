@@ -3,6 +3,7 @@ kind: Application
 metadata:
   name: python-app
   namespace: argocd
+
 spec:
   project: default
 
@@ -19,3 +20,6 @@ spec:
     automated:
       prune: true
       selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
