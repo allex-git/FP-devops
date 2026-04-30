@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 app = FastAPI()
 
-app.mount("/web", StaticFiles(directory="app/webpage"), name="web")
+app.mount("/web", StaticFiles(directory="webpage"), name="web")
 
 START_TIME = datetime.now(timezone.utc)
 
@@ -20,13 +20,13 @@ def get_host_info():
     hostname = socket.gethostname()
     try:
         ip = socket.gethostbyname(hostname)
-    except:
+    except Exception:
         ip = "unknown"
     return hostname, ip
 
 @app.get("/", response_class=HTMLResponse)
-def ui():
-    with open("app/webpage/index.html", encoding="utf-8") as f:
+def root():
+    with open("webpage/index.html", encoding="utf-8") as f:
         return f.read()
 
 @app.get("/api")
@@ -41,6 +41,10 @@ def api():
         "pod_ip": POD_IP,
         "pod_name": POD_NAME,
         "author": "Allex DevOps",
-        #"datetime": now.isoformat(),
+        "datetime": now.isoformat(),
         "uptime_seconds": int((now - START_TIME).total_seconds())
     }
+
+@app.get("/healthz")
+def health():
+    return {"status": "healthy"}

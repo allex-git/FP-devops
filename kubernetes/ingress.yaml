@@ -1,17 +1,31 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
+
 metadata:
   name: python-app-ingress
+  namespace: python-app
+
   annotations:
-    kubernetes.io/ingress.class: nginx
     external-dns.alpha.kubernetes.io/hostname: app.allex-devops.devops11.test-danit.com
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+
 spec:
+  ingressClassName: nginx
+
+  tls:
+    - hosts:
+        - app.allex-devops.devops11.test-danit.com
+      secretName: tls-secret
+
   rules:
     - host: app.allex-devops.devops11.test-danit.com
+
       http:
         paths:
           - path: /
             pathType: Prefix
+
             backend:
               service:
                 name: python-app-service

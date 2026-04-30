@@ -18,5 +18,3 @@ override.tf.json
 .vscode/
 .idea/
 *.swp
-final-project-app/
-final-project-infrastructure/

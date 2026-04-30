@@ -6,14 +6,13 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 COPY app/requirements.txt .
-
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ .
 
 LABEL maintainer="Allex DevOps"
 LABEL project="Final-Project"
-LABEL description="Final Project"
+LABEL description="FastAPI backend for DevOps Final Project"
 
 RUN useradd -m appuser && chown -R appuser:appuser /app
 USER appuser

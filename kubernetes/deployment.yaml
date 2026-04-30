@@ -1,24 +1,60 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: python-app
-  namespace: default
+  namespace: python-app
+  labels:
+    app: python-app
+
 spec:
   replicas: 2
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
   selector:
     matchLabels:
       app: python-app
+
   template:
     metadata:
       labels:
         app: python-app
+
     spec:
+      terminationGracePeriodSeconds: 30
+
       containers:
         - name: python-app
+
           image: alexdevops05/final-project:a7723b0
-          imagePullPolicy: Always
+
+          imagePullPolicy: IfNotPresent
+
           ports:
             - containerPort: 8080
+
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 5
 
           readinessProbe:
             httpGet:
@@ -26,6 +62,7 @@ spec:
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
+            failureThreshold: 3
 
           livenessProbe:
             httpGet:
@@ -33,6 +70,7 @@ spec:
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 20
+            failureThreshold: 3
 
           resources:
             requests:

@@ -3,37 +3,80 @@ let lastPod = null;
 const podMap = {};
 let podCounter = 1;
 
+let loading = false;
+
 function getPodIndex(name) {
-    if (!podMap[name]) {
-        podMap[name] = podCounter++;
+    const podName = name || "unknown";
+
+    if (!podMap[podName]) {
+        podMap[podName] = podCounter++;
     }
-    return podMap[name];
+
+    return podMap[podName];
 }
 
 function formatDate(date) {
+    if (!date) {
+        return "N/A";
+    }
+
     const d = new Date(date);
-    const pad = n => n.toString().padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+    if (Number.isNaN(d.getTime())) {
+        return "Invalid date";
+    }
+
+    const pad = n => n.toString().padStart(2, "0");
+
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 async function loadData() {
+    if (loading) {
+        return;
+    }
+
+    loading = true;
+
     try {
         const res = await fetch("/api");
+
+        if (!res.ok) {
+            throw new Error(`HTTP error: ${res.status}`);
+        }
+
         const data = await res.json();
 
-        const changed = lastPod && lastPod !== data.pod_name;
-        lastPod = data.pod_name;
+        const podName = data.pod_name || "unknown";
+        const changed = lastPod && lastPod !== podName;
+
+        lastPod = podName;
 
         render(data, changed);
 
-    } catch {
-        document.getElementById("app").innerHTML = "Backend error";
+    } catch (error) {
+        console.error("Backend request failed:", error);
+
+        document.getElementById("app").innerHTML = `
+            <div class="panel error">
+                <div class="status-card status-error">
+                    Backend error
+                </div>
+            </div>
+        `;
+    } finally {
+        loading = false;
     }
 }
 
 function render(data, changed) {
     const isOk = data.status === "ok";
-    const podIndex = getPodIndex(data.pod_name);
+
+    const podName = data.pod_name || "unknown";
+    const podIp = data.pod_ip || "unknown";
+    const author = data.author || "N/A";
+
+    const podIndex = getPodIndex(podName);
 
     document.getElementById("app").innerHTML = `
         <div class="panel ${isOk ? "ok" : "error"} ${changed ? "switch" : ""}">
@@ -53,12 +96,12 @@ function render(data, changed) {
 
                 <div class="row">
                     <span class="label">Pod Name</span>
-                    <span>${data.pod_name}</span>
+                    <span>${podName}</span>
                 </div>
 
                 <div class="row">
                     <span class="label">Pod IP</span>
-                    <span>${data.pod_ip}</span>
+                    <span>${podIp}</span>
                 </div>
 
                 ${data.uptime_seconds !== undefined ? `
@@ -67,14 +110,15 @@ function render(data, changed) {
                     <span>${data.uptime_seconds}s</span>
                 </div>` : ""}
 
+                ${data.datetime ? `
                 <div class="row">
                     <span class="label">Time</span>
                     <span>${formatDate(data.datetime)}</span>
-                </div>
+                </div>` : ""}
 
                 <div class="row">
                     <span class="label">Author</span>
-                    <span>${data.author}</span>
+                    <span>${author}</span>
                 </div>
 
             </div>

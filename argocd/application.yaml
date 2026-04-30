@@ -9,12 +9,13 @@ spec:
 
   source:
     repoURL: https://github.com/allex-git/FP-devops.git
+
     targetRevision: main
     path: kubernetes
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: python-app
 
   syncPolicy:
     automated:
@@ -23,3 +24,4 @@ spec:
 
     syncOptions:
       - CreateNamespace=true
+      - PruneLast=true
