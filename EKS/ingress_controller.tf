@@ -15,7 +15,6 @@ resource "helm_release" "nginx_ingress" {
     value = "LoadBalancer"
   }
 
-  # TLS
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-cert"
     value = module.acm.acm_certificate_arn
@@ -31,7 +30,6 @@ resource "helm_release" "nginx_ingress" {
     value = "http"
   }
 
-  # NLB
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
     value = "nlb"
@@ -47,13 +45,8 @@ resource "helm_release" "nginx_ingress" {
     value = "internet-facing"
   }
 
-  # Healthcheck
-  set {
-    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-healthcheck-path"
-    value = "/healthz"
   }
 
-  # Tags
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-additional-resource-tags"
     value = "created_by=${var.created_by}"
