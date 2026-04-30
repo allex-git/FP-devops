@@ -15,10 +15,6 @@ data "aws_availability_zones" "available" {}
 
 data "aws_eks_cluster" "danit" {
   name = aws_eks_cluster.danit.name
-
-  depends_on = [
-    aws_eks_cluster.danit
-  ]
 }
 
 
