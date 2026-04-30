@@ -12,29 +12,24 @@ resource "helm_release" "argocd" {
 
   values = [
     <<EOF
-configs:
-  cm:
-    timeout.reconciliation: 20s
+  configs:
+    cm:
+      timeout.reconciliation: 20s
 
-server:
-  extraArgs:
-    - --insecure
+  server:
+    extraArgs:
+      - --insecure
 
-  ingress:
-    enabled: true
-    ingressClassName: nginx
+    ingress:
+      enabled: true
+      ingressClassName: nginx
 
-    hosts:
-      - host: argocd.allex-devops.devops11.test-danit.com
-        paths:
-          - path: /
-            pathType: Prefix
+      hostname: argocd.allex-devops.devops11.test-danit.com
 
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      external-dns.alpha.kubernetes.io/hostname: argocd.allex-devops.devops11.test-danit.com
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-EOF
+      annotations:
+        external-dns.alpha.kubernetes.io/hostname: argocd.allex-devops.devops11.test-danit.com
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  EOF
   ]
 }
