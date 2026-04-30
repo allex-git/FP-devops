@@ -10,7 +10,7 @@ module "eks-external-dns" {
 
   settings = {
     "domainFilters[0]" = var.zone_name
-    policy        = "upsert-only"
+    policy        = "sync"
     txtOwnerId    = var.name
   }
 }

@@ -5,7 +5,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      created_by = var.name 
+      created_by = var.name
     }
   }
 }
@@ -13,6 +13,7 @@ provider "aws" {
 # Availability zones
 data "aws_availability_zones" "available" {}
 
+# Получаем данные о созданном EKS кластере
 data "aws_eks_cluster" "danit" {
   name = aws_eks_cluster.danit.name
 
@@ -21,8 +22,9 @@ data "aws_eks_cluster" "danit" {
   ]
 }
 
+# ❗ FIX: используем тот же cluster name
 data "aws_eks_cluster_auth" "danit" {
-  name = var.name
+  name = aws_eks_cluster.danit.name
 }
 
 # Kubernetes provider
@@ -41,6 +43,7 @@ provider "helm" {
   }
 }
 
+# Terraform providers
 terraform {
   required_providers {
     aws = {
