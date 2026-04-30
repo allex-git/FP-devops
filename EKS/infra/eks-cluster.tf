@@ -4,16 +4,16 @@ resource "aws_eks_cluster" "danit" {
 
   vpc_config {
     subnet_ids         = module.vpc.private_subnets
-    security_group_ids = [aws_security_group.danit-cluster.id]
+    security_group_ids = [aws_security_group.danit_cluster.id]
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.kubeedge-cluster-AmazonEKSClusterPolicy,
-    aws_iam_role_policy_attachment.kubeedge-cluster-AmazonEKSVPCResourceController
+    aws_iam_role_policy_attachment.cluster_AmazonEKSClusterPolicy,
+    aws_iam_role_policy_attachment.cluster_AmazonEKSVPCResourceController
   ]
 
   tags = merge(var.tags, {
-  Name       = "allex-devops"
-  created_by = var.name
+    Name       = var.name
+    created_by = var.name
   })
 }

@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0"
+    }
+  }
+}
+
 provider "aws" {
   region  = var.region
   profile = var.iam_profile
@@ -9,5 +23,4 @@ provider "aws" {
   }
 }
 
-# Availability zones (для VPC)
 data "aws_availability_zones" "available" {}

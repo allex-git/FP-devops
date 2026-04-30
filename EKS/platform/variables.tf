@@ -11,3 +11,6 @@ variable "zone_name" {}
 variable "created_by" {
   default = "Allex_DevOps"
 }
+variable "name" {
+  description = "Cluster name"
+}

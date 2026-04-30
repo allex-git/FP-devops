@@ -30,11 +30,11 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host                   = data.terraform_remote_state.infra.outputs.cluster_endpoint
     cluster_ca_certificate = base64decode(data.terraform_remote_state.infra.outputs.cluster_ca)
 
-    exec {
+    exec = {
       api_version = "client.authentication.k8s.io/v1beta1"
       command     = "aws"
       args = [
