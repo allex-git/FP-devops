@@ -11,6 +11,11 @@ resource "helm_release" "nginx_ingress" {
   ]
 
   set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-healthcheck-path"
+    value = "/healthz"
+  }
+  
+  set {
     name  = "controller.service.type"
     value = "LoadBalancer"
   }
@@ -45,14 +50,11 @@ resource "helm_release" "nginx_ingress" {
     value = "internet-facing"
   }
 
-  }
-
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-additional-resource-tags"
     value = "created_by=${var.created_by}"
   }
 
-  # Ports
   set {
     name  = "controller.service.targetPorts.http"
     value = "http"
@@ -63,7 +65,6 @@ resource "helm_release" "nginx_ingress" {
     value = "http"
   }
 
-  # Redirect
   set {
     name  = "controller.config.ssl-redirect"
     value = "true"
