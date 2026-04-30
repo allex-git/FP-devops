@@ -15,9 +15,15 @@ resource "helm_release" "nginx_ingress" {
     value = "LoadBalancer"
   }
 
+  # TLS
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-cert"
     value = module.acm.acm_certificate_arn
+  }
+
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-ports"
+    value = "443"
   }
 
   set {
@@ -25,9 +31,15 @@ resource "helm_release" "nginx_ingress" {
     value = "http"
   }
 
+  # NLB
   set {
-    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-ports"
-    value = "https"
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
+    value = "nlb"
+  }
+
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-nlb-target-type"
+    value = "ip"
   }
 
   set {
@@ -35,16 +47,19 @@ resource "helm_release" "nginx_ingress" {
     value = "internet-facing"
   }
 
+  # Healthcheck
   set {
-    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
-    value = "nlb"
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-healthcheck-path"
+    value = "/healthz"
   }
 
+  # Tags
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-additional-resource-tags"
     value = "created_by=${var.created_by}"
   }
 
+  # Ports
   set {
     name  = "controller.service.targetPorts.http"
     value = "http"
@@ -55,6 +70,7 @@ resource "helm_release" "nginx_ingress" {
     value = "http"
   }
 
+  # Redirect
   set {
     name  = "controller.config.ssl-redirect"
     value = "true"
