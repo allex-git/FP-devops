@@ -4,15 +4,17 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - "kubernetes/deployment.yaml"
+    paths:
+      - "app/**"
+      - "Dockerfile"
+      - "requirements.txt"
 
 permissions:
   contents: read
 
 concurrency:
   group: pipeline-main
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
   IMAGE_NAME: final-project
@@ -106,35 +108,31 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.tag }}
 
   update:
-    runs-on: ubuntu-latest
-    needs: push
+  runs-on: ubuntu-latest
+  needs: push
 
-    permissions:
-      contents: write
+  permissions:
+    contents: write
 
-    steps:
-      - name: checkout code
-        uses: actions/checkout@v4
+  steps:
+    - name: checkout code
+      uses: actions/checkout@v4
 
-      - name: update image tag in deployment.yaml
-        run: |
-          # FIX: заменяем только image с Docker Hub image final-project.
-          sed -i 's|image: .*/final-project:.*|image: '"${{ secrets.DOCKERHUB_USERNAME }}/final-project:${{ needs.push.outputs.tag }}"'|' kubernetes/deployment.yaml
+    - name: update and push deployment
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
 
-      - name: commit and push deployment update
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+        git pull --rebase origin main
 
-          git add kubernetes/deployment.yaml
+        sed -i 's|image: .*/final-project:.*|image: '"${{ secrets.DOCKERHUB_USERNAME }}/final-project:${{ needs.push.outputs.tag }}"'|' kubernetes/deployment.yaml
 
-          if git diff --cached --quiet; then
-            echo "No deployment image change"
-            exit 0
-          fi
+        git add kubernetes/deployment.yaml
 
-          git commit -m "update image tag to ${{ needs.push.outputs.tag }}"
+        if git diff --cached --quiet; then
+          echo "No deployment image change"
+          exit 0
+        fi
 
-          # FIX: защита от reject, если main обновился во время pipeline.
-          git pull --rebase origin main
-          git push
+        git commit -m "update image tag to ${{ needs.push.outputs.tag }}"
+        git push
