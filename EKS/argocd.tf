@@ -2,7 +2,7 @@ resource "helm_release" "argocd" {
   name             = "argocd"
   repository       = "https://argoproj.github.io/argo-helm"
   chart            = "argo-cd"
-  version          = "9.4.9"
+  version          = "9.5.4"
   namespace        = "argocd"
   create_namespace = true
 
@@ -25,7 +25,7 @@ resource "helm_release" "argocd" {
 
   depends_on = [
     helm_release.nginx_ingress,
-    module.eks-external-dns,
+    #module.eks-external-dns,
     aws_eks_node_group.danit,
   ]
 }
@@ -67,12 +67,4 @@ resource "kubernetes_ingress_v1" "argocd" {
     aws_eks_node_group.danit,
     helm_release.nginx_ingress
   ]
-}
-
-data "kubernetes_secret" "argocd_secret" {
-  metadata {
-    name      = "argocd-initial-admin-secret"
-    namespace = helm_release.argocd.namespace
-  }
-  depends_on = [helm_release.argocd]
 }

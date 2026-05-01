@@ -7,16 +7,11 @@ metadata:
 
   annotations:
     external-dns.alpha.kubernetes.io/hostname: app.allex-devops.devops11.test-danit.com
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 
 spec:
   ingressClassName: nginx
-
-  tls:
-    - hosts:
-        - app.allex-devops.devops11.test-danit.com
-      secretName: tls-secret
 
   rules:
     - host: app.allex-devops.devops11.test-danit.com
