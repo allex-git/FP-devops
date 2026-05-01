@@ -142,11 +142,11 @@ body {
 }
 
 .switch {
-    animation: switchFlash 0.8s ease;
+    animation: switchFlash 1s ease;
 }
 
 @keyframes switchFlash {
     0% { transform: scale(1); }
-    50% { transform: scale(1.03); filter: brightness(1.2); }
+    50% { transform: scale(1.04); filter: brightness(1.2); }
     100% { transform: scale(1); }
 }

@@ -79,7 +79,7 @@ function render(data, changed) {
     const podIndex = getPodIndex(podName);
 
     document.getElementById("app").innerHTML = `
-        <div class="panel Status ${isOk ? "ok" : "error"} ${changed ? "switch" : ""}">
+        <div class="panel ${isOk ? "ok" : "error"} ${changed ? "switch" : ""}">
 
             <div class="badge">POD #${podIndex}</div>
 
@@ -89,7 +89,7 @@ function render(data, changed) {
             </div>
 
             <div class="status-card ${isOk ? "status-ok" : "status-error"}">
-                ${isOk ? "OK" : "ERROR"}
+                $ Status {isOk ? "OK" : "ERROR"}
             </div>
 
             <div class="pod-info">
