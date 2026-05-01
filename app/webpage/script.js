@@ -128,4 +128,4 @@ function render(data, changed) {
 }
 
 loadData();
-setInterval(loadData, 3000);
+setInterval(loadData, 2600);
