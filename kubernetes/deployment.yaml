@@ -36,7 +36,7 @@ spec:
           imagePullPolicy: IfNotPresent
 
           ports:
-            - containerPort: 8080
+            - containerPort: 80
 
           env:
             - name: POD_NAME
@@ -52,14 +52,14 @@ spec:
           startupProbe:
             httpGet:
               path: /healthz
-              port: 8080
+              port: 80
             failureThreshold: 30
             periodSeconds: 5
 
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 8080
+              port: 80
             initialDelaySeconds: 5
             periodSeconds: 10
             failureThreshold: 3
@@ -67,7 +67,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 8080
+              port: 80
             initialDelaySeconds: 10
             periodSeconds: 20
             failureThreshold: 3
