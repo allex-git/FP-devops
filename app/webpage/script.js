@@ -74,7 +74,7 @@ function render(data, changed) {
 
     const podName = data.pod_name || "unknown";
     const podIp = data.pod_ip || "unknown";
-    const author = data.author || "N/A";
+    const devops = data.devops || "N/A";
 
     const podIndex = getPodIndex(podName);
 
@@ -117,8 +117,8 @@ function render(data, changed) {
                 </div>` : ""}
 
                 <div class="row">
-                    <span class="label">Author</span>
-                    <span>${author}</span>
+                    <span class="label">DevOps Engineer</span>
+                    <span>${devops}</span>
                 </div>
 
             </div>
