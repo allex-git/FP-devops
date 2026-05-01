@@ -6,6 +6,11 @@ resource "helm_release" "nginx_ingress" {
   namespace        = "kube-system"
   create_namespace = true
 
+  depends_on = [
+    aws_eks_cluster.danit,
+    aws_eks_node_group.danit
+  ]
+  
   # This is the marker that node is not edge, we add label system in eks node group
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-cert"

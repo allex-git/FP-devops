@@ -10,6 +10,7 @@ resource "helm_release" "argocd" {
     <<-EOT
     configs:
       cm:
+        timeout.reconciliation: 20s
         url: "https://argocd.${var.name}.${var.zone_name}"
 
     server:
@@ -61,7 +62,10 @@ resource "kubernetes_ingress_v1" "argocd" {
   }
 
   depends_on = [
-    helm_release.argocd
+    helm_release.argocd,
+    aws_eks_cluster.danit,
+    aws_eks_node_group.danit,
+    helm_release.nginx_ingress
   ]
 }
 

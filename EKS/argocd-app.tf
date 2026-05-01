@@ -1,4 +1,4 @@
-resource "kubernetes_manifest" "argocd_application" {
+resource "kubernetes_manifest" "argocd_app" {
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
