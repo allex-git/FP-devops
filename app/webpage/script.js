@@ -60,7 +60,7 @@ async function loadData() {
         document.getElementById("app").innerHTML = `
             <div class="panel error">
                 <div class="status-card status-error">
-                    Backend error
+                    Backend ERROR
                 </div>
             </div>
         `;
@@ -128,4 +128,4 @@ function render(data, changed) {
 }
 
 loadData();
-setInterval(loadData, 2600);
+setInterval(loadData, 2000);
