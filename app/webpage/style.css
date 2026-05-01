@@ -27,7 +27,7 @@ body {
 }
 
 .panel.ok {
-    animation: heartbeat 1.6s infinite ease-in-out;
+    animation: heartbeat 2.6s infinite ease-in-out;
 }
 
 .panel::before {
