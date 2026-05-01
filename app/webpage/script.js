@@ -89,7 +89,7 @@ function render(data, changed) {
             </div>
 
             <div class="status-card ${isOk ? "status-ok" : "status-error"}">
-                Status ${isOk ? "200 OK" : "503 ERROR"}
+                ${isOk ? "OK" : "ERROR"}
             </div>
 
             <div class="pod-info">
@@ -128,4 +128,4 @@ function render(data, changed) {
 }
 
 loadData();
-setInterval(loadData, 2000);
+setInterval(loadData, 3000);
