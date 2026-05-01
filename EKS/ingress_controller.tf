@@ -21,16 +21,29 @@ resource "helm_release" "nginx_ingress" {
     name = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-scheme"
     value = "internet-facing"
   }
+
   set {
     name = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
     value = "nlb"
   }
+
   set {
     name = "controller.service.targetPorts.http"
     value = "http"
   }
+
   set {
     name = "controller.service.targetPorts.https"
     value = "http"
+  }
+
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-ports"
+    value = "https"
+  }
+
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-cert"
+    value = module.acm.acm_certificate_arn
   }
 }
