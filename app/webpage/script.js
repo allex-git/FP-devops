@@ -60,7 +60,7 @@ async function loadData() {
         document.getElementById("app").innerHTML = `
             <div class="panel error">
                 <div class="status-card status-error">
-                    Backend ERROR
+                    503 Service Unavailable
                 </div>
             </div>
         `;
