@@ -152,6 +152,6 @@ body {
 
 @keyframes switchFlash {
     0% { transform: scale(1); }
-    50% { transform: scale(1.05); filter: brightness(1.2); }
+    50% { transform: scale(1.05); filter: brightness(1.17); }
     100% { transform: scale(1); }
 }
