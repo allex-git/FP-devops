@@ -79,7 +79,7 @@ function render(data, changed) {
     const podIndex = getPodIndex(podName);
 
     document.getElementById("app").innerHTML = `
-        <div class="panel ${isOk ? "ok" : "error"} ${changed ? "switch" : ""}">
+        <div class="panel Status ${isOk ? "ok" : "error"} ${changed ? "switch" : ""}">
 
             <div class="badge">POD #${podIndex}</div>
 
@@ -107,7 +107,7 @@ function render(data, changed) {
                 ${data.uptime_seconds !== undefined ? `
                 <div class="row">
                     <span class="label">Uptime</span>
-                    <span>${data.uptime_seconds}s</span>
+                    <span>${data.uptime_seconds} s</span>
                 </div>` : ""}
 
                 ${data.datetime ? `
