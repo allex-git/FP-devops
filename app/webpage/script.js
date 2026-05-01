@@ -112,7 +112,7 @@ function render(data, changed) {
 
                 ${data.datetime ? `
                 <div class="row">
-                    <span class="label">Time</span>
+                    <span class="label">Date</span>
                     <span>${formatDate(data.datetime)}</span>
                 </div>` : ""}
 
