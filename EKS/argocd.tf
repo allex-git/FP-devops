@@ -68,3 +68,14 @@ resource "kubernetes_ingress_v1" "argocd" {
     helm_release.nginx_ingress
   ]
 }
+
+data "kubernetes_secret" "argocd_secret" {
+  metadata {
+    name      = "argocd-initial-admin-secret"
+    namespace = "argocd"
+  }
+
+  depends_on = [
+    helm_release.argocd
+  ]
+}
