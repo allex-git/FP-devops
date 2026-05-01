@@ -89,7 +89,7 @@ function render(data, changed) {
             </div>
 
             <div class="status-card ${isOk ? "status-ok" : "status-error"}">
-                Status  ${isOk ? "OK" : "ERROR"}
+                Status  ${isOk ? "OK" : "Error"}
             </div>
 
             <div class="pod-info">
