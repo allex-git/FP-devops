@@ -27,7 +27,7 @@ body {
 }
 
 .panel.ok {
-    animation: heartbeat 2.6s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    animation: heartbeat 2.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .panel::before {
