@@ -12,11 +12,10 @@ COPY app/ .
 
 LABEL maintainer="Allex DevOps"
 LABEL project="Final-Project"
-LABEL description="FastAPI backend for DevOps Final Project"
 
 RUN useradd -m appuser && chown -R appuser:appuser /app
 USER appuser
 
-EXPOSE 8080
+EXPOSE 80
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
