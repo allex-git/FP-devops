@@ -31,7 +31,7 @@ spec:
       containers:
         - name: python-app
 
-          image: alexdevops05/final-project:a7723b0
+          image: alexdevops05/final-project:129fb92
 
           imagePullPolicy: IfNotPresent
 
