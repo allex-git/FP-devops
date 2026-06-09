@@ -579,13 +579,7 @@ kubectl get applications -n argocd
 - як автоматизується доставка (CI/CD)  
 - як керується кластер через Git (GitOps)  
 - як працює Kubernetes у реальному сценарії  
-- як усе це інтегрується в AWS  
+- як усе це інтегрується в AWS
+
 ---
 
-
-## **Demo**
-
-Додаток доступний за адресою:
-https://app.<your-name>.<your-domain>
-
-</div>
