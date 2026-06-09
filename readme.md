@@ -76,6 +76,22 @@ Client → Route53 → LoadBalancer → Ingress → Service → Pod
 
 ---
 
+## DNS
+
+DNS записи створюються автоматично через ExternalDNS.
+
+Схема роботи:
+
+```text
+Ingress → ExternalDNS → Route53
+```
+
+ExternalDNS відслідковує Ingress ресурси в Kubernetes та автоматично створює або оновлює DNS записи в Route53.
+
+Завдяки цьому DNS повністю керується з Kubernetes і не потребує ручного створення записів.
+
+---
+
 ## **Технології**
 
 
@@ -91,6 +107,64 @@ Client → Route53 → LoadBalancer → Ingress → Service → Pod
 
 ---
 
+## **Попередні вимоги**
+
+Перед початком роботи необхідно встановити:
+
+- Git
+- Docker
+- AWS CLI v2
+- Terraform >= 1.6
+- kubectl
+- Helm 3
+
+Перевірка:
+
+```bash
+git --version
+docker --version
+aws --version
+terraform version
+kubectl version --client
+helm version
+```
+
+---
+
+## **Необхідні AWS ресурси**
+
+Перед запуском Terraform необхідно створити:
+
+### S3 Bucket
+
+Використовується для зберігання Terraform state.
+
+Приклад:
+
+```text
+tf-tfstate-<your-name>
+```
+
+### DynamoDB Table
+
+Використовується для блокування Terraform state.
+
+Приклад:
+
+```text
+devops-lock-tf-eks
+```
+
+### Route53 Hosted Zone
+
+Приклад:
+
+```text
+devops.test-it.com
+```
+
+---
+
 ## **CI/CD pipeline**
 
 
@@ -100,7 +174,7 @@ app/**
 Dockerfile
 ```
 
-Таким чином::
+Таким чином:
 - зміни в інфраструктурі (terraform, kubernetes) **не запускають pipeline**
 - pipeline працює тільки тоді, коли реально потрібно перевірити та задеплоїти нову версію додатку
 
@@ -116,6 +190,20 @@ Pipeline ігнорує зміни у `kubernetes/deployment.yaml`, щоб ун�
 
 ---
 
+## **GitHub Secrets**
+
+Для роботи GitHub Actions необхідно створити наступні Secrets:
+
+```text
+DOCKERHUB_USERNAME
+DOCKERHUB_TOKEN
+```
+
+DOCKERHUB_USERNAME - ім'я користувача Docker Hub.
+
+DOCKERHUB_TOKEN - Access Token Docker Hub.
+
+---
 
 ## **Pipeline Flow**
 
@@ -184,10 +272,66 @@ Lint → Build → Scan → Push → Update → ArgoCD Sync
 
 ---
 
+## Архітектура рішення
+
+```text
+Developer
+    │
+    ▼
+GitHub Repository
+    │
+    ▼
+GitHub Actions
+    │
+    ▼
+Docker Hub
+    │
+    ▼
+Git Repository (deployment.yaml)
+    │
+    ▼
+ArgoCD
+    │
+    ▼
+EKS Cluster
+    │
+    ▼
+Application Pods
+```
+
+---
+
+## **Terraform Variables**
+
+Перед запуском необхідно налаштувати terraform.tfvars.
+
+Приклад:
+
+```hcl
+name      = "<your-name>"
+zone_name = "<your-domain>"
+```
+
+Основні змінні:
+
+| Variable | Опис |
+|-----------|------|
+| name | назва кластера |
+| zone_name | Route53 Hosted Zone |
+
+---
+
 ## **Розгортання**
 
 
-### 1. Підготовка Terraform backend (DynamoDB lock)
+### 1. Клонування репозиторію
+
+```bash
+git clone https://github.com/<your-git>/<your-project>.git
+cd <your-project>
+```
+
+### 2. Підготовка Terraform backend (DynamoDB lock)
 
 ```bash
 aws dynamodb create-table \
@@ -200,11 +344,11 @@ aws dynamodb create-table \
 Cтворює DynamoDB таблицю для Terraform lock. Terraform використовує її для блокування state, запобігає одночасному виконанню terraform apply та захищає від пошкодження state.
 
 
-
-### 2. Terraform
+### 3. Terraform
 
 ```bash
 terraform init
+terraform plan
 terraform apply
 ```
 
@@ -212,7 +356,7 @@ terraform apply
 
 
 
-### 3. Підключення до кластера
+### 4. Підключення до кластера
 
 ```bash
 aws eks update-kubeconfig --region eu-central-1 --name <cluster>
@@ -220,8 +364,14 @@ aws eks update-kubeconfig --region eu-central-1 --name <cluster>
 
 дозволяє працювати через kubectl
 
+### 5. Перевірка підключення
 
-### 4. ArgoCD
+```bash
+kubectl get nodes
+kubectl get pods -A
+```
+
+### 6. ArgoCD
 
 ```bash
 kubectl apply -f argocd/application.yaml
@@ -230,7 +380,7 @@ kubectl apply -f argocd/application.yaml
 запускає GitOps
 
 
-## Перевірка системи
+## **Перевірка системи**
 
 
 ### pods
@@ -270,7 +420,7 @@ kubectl get endpoints -n python-app
 
 ---
 
-## Тест помилки
+## **Тест помилки**
 
 
 ```bash
@@ -285,7 +435,7 @@ kubectl scale deployment python-app -n python-app --replicas=0
 
 ---
 
-## Debug Commands
+## **Debug Commands**
 
 
 ```bash
@@ -345,7 +495,41 @@ kubectl apply -f argocd/application.yaml
 
 ---
 
-## Висновок
+## **Troubleshooting**
+
+### Pod не запускається
+
+```bash
+kubectl get pods -n python-app
+kubectl describe pod <pod-name> -n python-app
+```
+
+### Service не бачить Pod
+
+```bash
+kubectl get endpoints -n python-app
+```
+
+Якщо endpoints порожній - Service не має доступних Pod.
+
+### Ingress повертає 503
+
+Перевірити:
+
+```bash
+kubectl get pods -n python-app
+kubectl get endpoints -n python-app
+```
+
+### ArgoCD не синхронізує зміни
+
+```bash
+kubectl get applications -n argocd
+```
+
+---
+
+## **Висновок**
 
 
 У цьому проєкті реалізовано повний цикл доставки додатку - від змін у коді до автоматичного деплою в Kubernetes.
@@ -399,22 +583,9 @@ kubectl apply -f argocd/application.yaml
 ---
 
 
-
-
-
-## Demo
+## **Demo**
 
 Додаток доступний за адресою:
-https://app.allex-devops.devops11.test-danit.com
-
-Відео демонстрації:
-
-[▶️ Demo video](https://raw.githubusercontent.com/allex-git/azigman/33c2548b44a70304ab85c73fed7cc595fa4057dc/Final%20project/screens/demo_app_work.mp4)
-
----
-
-
-<div align="center">
-Дякую за увагу :)
+https://app.<your-name>.<your-domain>
 
 </div>
